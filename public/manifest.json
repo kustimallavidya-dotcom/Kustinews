@@ -1,0 +1,21 @@
+{
+  "name": "कुस्ती मल्लविद्या Newspaper Maker",
+  "short_name": "कुस्ती मल्लविद्या",
+  "description": "Create HD Marathi newspaper-style articles.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#8b0000",
+  "icons": [
+    {
+      "src": "https://picsum.photos/seed/kusti/192/192",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://picsum.photos/seed/kusti/512/512",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
