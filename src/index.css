@@ -8,25 +8,48 @@
 body {
   background-color: #f3f4f6;
   font-family: var(--font-mukta);
+  -webkit-font-smoothing: antialiased;
 }
 
 .newspaper-columns {
   column-count: 2;
-  column-gap: 2rem;
-  column-rule: 1px solid #e5e7eb;
+  column-gap: 2.5rem;
+  column-rule: 1px solid #d1d5db;
   text-align: justify;
+  hyphens: auto;
+}
+
+@media (max-width: 768px) {
+  .newspaper-columns {
+    column-count: 1;
+  }
 }
 
 .drop-cap::first-letter {
   float: left;
-  font-size: 4rem;
-  line-height: 0.8;
-  padding-top: 4px;
-  padding-right: 8px;
-  padding-left: 3px;
+  font-size: 4.5rem;
+  line-height: 0.7;
+  padding-top: 8px;
+  padding-right: 12px;
+  padding-left: 4px;
   font-family: var(--font-tiro);
   font-weight: bold;
   color: #8b0000;
+  text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
+}
+
+.creative-title {
+  font-family: var(--font-tiro);
+  background: linear-gradient(to bottom, #8b0000, #5a0000);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.1));
+  letter-spacing: -0.02em;
+}
+
+.author-card {
+  border-left: 4px solid #8b0000;
+  background: #fff9f9;
 }
 
 /* Hide scrollbar for the canvas during export if needed */
@@ -36,4 +59,9 @@ body {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Custom focus ring */
+.focus-ring {
+  @apply focus:ring-2 focus:ring-red-800 focus:border-transparent outline-none transition-all;
 }
