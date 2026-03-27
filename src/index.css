@@ -31,7 +31,9 @@ body {
   text-align: justify;
   hyphens: auto;
   color: #1a1a1a;
-  height: 1200px;
+  height: 1150px; /* Adjusted to fit within 1920px canvas */
+  margin-bottom: 20px;
+  overflow: hidden; /* Prevent messy overflow */
 }
 
 .drop-cap::first-letter {

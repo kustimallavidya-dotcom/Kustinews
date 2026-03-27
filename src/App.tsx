@@ -28,11 +28,15 @@ export default function App() {
   // Dynamic content styling logic
   const getContentStyles = () => {
     const len = content.length;
-    if (len < 200) return { fontSize: '42px', columnCount: 1, lineHeight: '1.4' };
-    if (len < 500) return { fontSize: '32px', columnCount: 2, lineHeight: '1.5' };
-    if (len < 1000) return { fontSize: '26px', columnCount: 2, lineHeight: '1.6' };
-    if (len < 1800) return { fontSize: '21px', columnCount: 3, lineHeight: '1.6' };
-    return { fontSize: '18px', columnCount: 3, lineHeight: '1.5' };
+    // More granular scaling for very long text
+    if (len < 200) return { fontSize: '44px', columnCount: 1, lineHeight: '1.4' };
+    if (len < 500) return { fontSize: '34px', columnCount: 2, lineHeight: '1.4' };
+    if (len < 1000) return { fontSize: '28px', columnCount: 2, lineHeight: '1.5' };
+    if (len < 2000) return { fontSize: '22px', columnCount: 3, lineHeight: '1.5' };
+    if (len < 3500) return { fontSize: '18px', columnCount: 3, lineHeight: '1.5' };
+    if (len < 5000) return { fontSize: '15px', columnCount: 4, lineHeight: '1.4' };
+    if (len < 7000) return { fontSize: '13px', columnCount: 4, lineHeight: '1.3' };
+    return { fontSize: '11px', columnCount: 5, lineHeight: '1.2' };
   };
 
   const dynamicStyles = getContentStyles();
@@ -60,16 +64,18 @@ export default function App() {
     try {
       // Ensure we are at the top for capture
       window.scrollTo(0, 0);
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Give more time for images and fonts to settle
+      await new Promise(resolve => setTimeout(resolve, 800));
       
       const canvas = await html2canvas(element, {
-        scale: 2, // High resolution
+        scale: 2, // High resolution for 1080x1920
         useCORS: true,
         allowTaint: true,
         backgroundColor: '#fffdfa',
         width: 1080,
         height: 1920,
         logging: false,
+        imageTimeout: 0, // No timeout for images
         onclone: (clonedDoc) => {
           const el = clonedDoc.getElementById('newspaper-canvas-export');
           if (el) {
@@ -77,6 +83,7 @@ export default function App() {
             el.style.position = 'relative';
             el.style.display = 'flex';
             el.style.margin = '0';
+            el.style.boxShadow = 'none';
           }
         }
       });
@@ -90,7 +97,7 @@ export default function App() {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        URL.revokeObjectURL(url);
+        setTimeout(() => URL.revokeObjectURL(url), 100);
       }, 'image/png', 1.0);
       
     } catch (error) {
@@ -228,13 +235,19 @@ export default function App() {
 
             {/* Export Buttons */}
             <div className="grid grid-cols-1 gap-3 pt-4">
-              <button onClick={exportAsImage} disabled={!!isExporting} className={`w-full py-4 rounded-2xl font-black text-white flex items-center justify-center gap-3 transition-all shadow-xl ${isExporting === 'png' ? 'bg-gray-400' : 'bg-red-800 hover:bg-red-900 active:scale-95'}`}>
-                {isExporting === 'png' ? <RefreshCw className="animate-spin" size={20} /> : <Download size={20} />}
-                STATUS इमेज डाउनलोड करा (PNG)
+              <button onClick={exportAsImage} disabled={!!isExporting} className={`w-full py-4 rounded-2xl font-black text-white flex flex-col items-center justify-center gap-1 transition-all shadow-xl ${isExporting === 'png' ? 'bg-gray-400' : 'bg-red-800 hover:bg-red-900 active:scale-95'}`}>
+                <div className="flex items-center gap-3">
+                  {isExporting === 'png' ? <RefreshCw className="animate-spin" size={20} /> : <Download size={20} />}
+                  STATUS इमेज डाउनलोड करा (PNG)
+                </div>
+                {isExporting === 'png' && <span className="text-[10px] font-bold opacity-80 animate-pulse">कृपया थोडा वेळ थांबा...</span>}
               </button>
-              <button onClick={exportAsPDF} disabled={!!isExporting} className={`w-full py-4 rounded-2xl font-black text-white flex items-center justify-center gap-3 transition-all shadow-xl ${isExporting === 'pdf' ? 'bg-gray-400' : 'bg-gray-800 hover:bg-black active:scale-95'}`}>
-                {isExporting === 'pdf' ? <RefreshCw className="animate-spin" size={20} /> : <FileText size={20} />}
-                PDF डाउनलोड करा
+              <button onClick={exportAsPDF} disabled={!!isExporting} className={`w-full py-4 rounded-2xl font-black text-white flex flex-col items-center justify-center gap-1 transition-all shadow-xl ${isExporting === 'pdf' ? 'bg-gray-400' : 'bg-gray-800 hover:bg-black active:scale-95'}`}>
+                <div className="flex items-center gap-3">
+                  {isExporting === 'pdf' ? <RefreshCw className="animate-spin" size={20} /> : <FileText size={20} />}
+                  PDF डाउनलोड करा
+                </div>
+                {isExporting === 'pdf' && <span className="text-[10px] font-bold opacity-80 animate-pulse">कृपया थोडा वेळ थांबा...</span>}
               </button>
             </div>
           </div>
@@ -294,7 +307,7 @@ export default function App() {
               </header>
 
               {/* Content Section */}
-              <main className="flex-grow">
+              <main className="flex-grow flex flex-col">
                 <div 
                   className="newspaper-columns drop-cap"
                   style={{ 
@@ -319,7 +332,7 @@ export default function App() {
                 </div>
 
                 {/* Author Credit Section */}
-                <div className="mt-20 flex justify-end">
+                <div className="mt-auto pt-10 flex justify-end">
                   <div className="author-card-premium flex items-center gap-6 min-w-[450px] shadow-sm">
                     <div className="w-28 h-28 rounded-full border-4 border-red-800 overflow-hidden bg-white shadow-lg flex-shrink-0">
                       {authorPhoto ? (
