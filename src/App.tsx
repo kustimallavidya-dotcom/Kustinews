@@ -114,7 +114,7 @@ export default function App() {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       const canvas = await html2canvas(element, {
-        scale: 2, // Higher scale for better quality
+        scale: 2,
         useCORS: true,
         allowTaint: false,
         backgroundColor: '#fffdfa',
@@ -129,17 +129,38 @@ export default function App() {
         onclone: (clonedDoc) => {
           const el = clonedDoc.getElementById('newspaper-canvas-export');
           if (el) {
+            // Force fixed dimensions to prevent layout collapse
+            el.style.width = '1080px';
+            el.style.height = '1920px';
             el.style.transform = 'none';
-            el.style.position = 'absolute';
-            el.style.left = '0';
-            el.style.top = '0';
+            el.style.position = 'relative';
             el.style.margin = '0';
+            el.style.padding = '40px';
             el.style.boxShadow = 'none';
-            el.style.border = '4px solid #000000';
+            el.style.border = 'none';
+            el.style.display = 'flex';
+            el.style.flexDirection = 'column';
+            el.style.backgroundColor = '#fffdfa';
             
-            // Fix for potential overlap in cloned version
-            const header = el.querySelector('header');
-            if (header) header.style.marginBottom = '30px';
+            // Fix for Grid layout issues in html2canvas - convert to Flex
+            const grid = el.querySelector('.newspaper-content-grid');
+            if (grid) {
+              (grid as HTMLElement).style.display = 'flex';
+              (grid as HTMLElement).style.gap = '32px';
+              const cols = grid.querySelectorAll('.flex-col');
+              cols.forEach(col => {
+                (col as HTMLElement).style.flex = '1';
+                (col as HTMLElement).style.width = '500px';
+              });
+            }
+
+            // Fix text rendering issues
+            const textContents = el.querySelectorAll('.newspaper-text-content');
+            textContents.forEach(node => {
+              (node as HTMLElement).style.textAlign = 'left'; // Avoid justify in export
+              (node as HTMLElement).style.letterSpacing = '0';
+              (node as HTMLElement).style.lineHeight = '1.6';
+            });
 
             // Remove texture overlay for export to avoid oklab/parsing issues
             const texture = el.querySelector('.paper-texture');
@@ -195,13 +216,38 @@ export default function App() {
         onclone: (clonedDoc) => {
           const el = clonedDoc.getElementById('newspaper-canvas-export');
           if (el) {
+            // Force fixed dimensions to prevent layout collapse
+            el.style.width = '1080px';
+            el.style.height = '1920px';
             el.style.transform = 'none';
-            el.style.position = 'absolute';
-            el.style.left = '0';
-            el.style.top = '0';
+            el.style.position = 'relative';
             el.style.margin = '0';
+            el.style.padding = '40px';
             el.style.boxShadow = 'none';
-            el.style.border = '4px solid #000000';
+            el.style.border = 'none';
+            el.style.display = 'flex';
+            el.style.flexDirection = 'column';
+            el.style.backgroundColor = '#fffdfa';
+
+            // Fix for Grid layout issues in html2canvas - convert to Flex
+            const grid = el.querySelector('.newspaper-content-grid');
+            if (grid) {
+              (grid as HTMLElement).style.display = 'flex';
+              (grid as HTMLElement).style.gap = '32px';
+              const cols = grid.querySelectorAll('.flex-col');
+              cols.forEach(col => {
+                (col as HTMLElement).style.flex = '1';
+                (col as HTMLElement).style.width = '500px';
+              });
+            }
+
+            // Fix text rendering issues
+            const textContents = el.querySelectorAll('.newspaper-text-content');
+            textContents.forEach(node => {
+              (node as HTMLElement).style.textAlign = 'left'; // Avoid justify in export
+              (node as HTMLElement).style.letterSpacing = '0';
+              (node as HTMLElement).style.lineHeight = '1.6';
+            });
 
             // Remove texture overlay for export to avoid oklab/parsing issues
             const texture = el.querySelector('.paper-texture');
