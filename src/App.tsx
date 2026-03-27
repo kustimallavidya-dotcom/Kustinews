@@ -25,6 +25,18 @@ export default function App() {
   const [panchang, setPanchang] = useState('पंचांग: शुभ मुहूर्त');
   const [suvichar, setSuvichar] = useState('सुविचार: कष्टाशिवाय फळ नाही.');
 
+  // Dynamic content styling logic
+  const getContentStyles = () => {
+    const len = content.length;
+    if (len < 200) return { fontSize: '42px', columnCount: 1, lineHeight: '1.4' };
+    if (len < 500) return { fontSize: '32px', columnCount: 2, lineHeight: '1.5' };
+    if (len < 1000) return { fontSize: '26px', columnCount: 2, lineHeight: '1.6' };
+    if (len < 1800) return { fontSize: '21px', columnCount: 3, lineHeight: '1.6' };
+    return { fontSize: '18px', columnCount: 3, lineHeight: '1.5' };
+  };
+
+  const dynamicStyles = getContentStyles();
+
   const [isExporting, setIsExporting] = useState<'png' | 'pdf' | null>(null);
 
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -46,32 +58,41 @@ export default function App() {
     setIsExporting('png');
     
     try {
-      // Ensure element is fully rendered
-      await new Promise(resolve => setTimeout(resolve, 800));
+      // Ensure we are at the top for capture
+      window.scrollTo(0, 0);
+      await new Promise(resolve => setTimeout(resolve, 500));
       
       const canvas = await html2canvas(element, {
-        scale: 2, // 2 is enough for 1080x1920 to be crisp
+        scale: 2, // High resolution
         useCORS: true,
-        backgroundColor: '#ffffff',
-        logging: false,
+        allowTaint: true,
+        backgroundColor: '#fffdfa',
         width: 1080,
         height: 1920,
+        logging: false,
         onclone: (clonedDoc) => {
           const el = clonedDoc.getElementById('newspaper-canvas-export');
           if (el) {
             el.style.transform = 'none';
-            el.style.position = 'static';
+            el.style.position = 'relative';
             el.style.display = 'flex';
             el.style.margin = '0';
           }
         }
       });
       
-      const image = canvas.toDataURL('image/png', 1.0);
-      const link = document.createElement('a');
-      link.download = `kusti-mallavidya-${Date.now()}.png`;
-      link.href = image;
-      link.click();
+      canvas.toBlob((blob) => {
+        if (!blob) throw new Error('Blob creation failed');
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = `kusti-mallavidya-${Date.now()}.png`;
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }, 'image/png', 1.0);
+      
     } catch (error) {
       console.error('Export failed:', error);
       alert('इमेज डाउनलोड करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.');
@@ -86,20 +107,21 @@ export default function App() {
     setIsExporting('pdf');
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 800));
+      window.scrollTo(0, 0);
+      await new Promise(resolve => setTimeout(resolve, 500));
       
       const canvas = await html2canvas(element, {
-        scale: 2,
+        scale: 1.5,
         useCORS: true,
-        backgroundColor: '#ffffff',
-        logging: false,
+        allowTaint: true,
+        backgroundColor: '#fffdfa',
         width: 1080,
         height: 1920,
         onclone: (clonedDoc) => {
           const el = clonedDoc.getElementById('newspaper-canvas-export');
           if (el) {
             el.style.transform = 'none';
-            el.style.position = 'static';
+            el.style.position = 'relative';
             el.style.display = 'flex';
             el.style.margin = '0';
           }
@@ -227,39 +249,45 @@ export default function App() {
               className="newspaper-canvas-9-16"
             >
               {/* Header Section */}
-              <header className="flex items-center justify-between mb-12 pb-10 border-b-[12px] border-double border-red-800">
-                {/* Logo Area */}
-                <div className="w-56 h-56 flex-shrink-0 flex items-center justify-center overflow-hidden">
-                  {logo ? (
-                    <img src={logo} alt="Logo" className="max-w-full max-h-full object-contain" referrerPolicy="no-referrer" />
-                  ) : (
-                    <div className="text-red-800 font-black text-center text-2xl border-4 border-red-800 p-4">लोगो</div>
-                  )}
-                </div>
+              <header className="mb-12 pb-10 border-b-[12px] border-double border-red-800">
+                <div className="flex items-center justify-between mb-10">
+                  {/* Logo Area */}
+                  <div className="w-48 h-48 flex items-center justify-center">
+                    {logo ? (
+                      <img src={logo} alt="Logo" className="max-w-full max-h-full object-contain" referrerPolicy="no-referrer" />
+                    ) : (
+                      <div className="text-red-800 font-black text-center text-xl border-4 border-red-800 p-4">लोगो</div>
+                    )}
+                  </div>
 
-                {/* Title Area */}
-                <div className="flex-grow text-center px-10">
-                  <h1 className="creative-title-main">
-                    {title}
-                  </h1>
-                  <div className="slogan-text">
-                    {slogan}
+                  {/* Masthead Center */}
+                  <div className="flex-grow text-center px-10">
+                    <h1 className="creative-title-main">
+                      {title}
+                    </h1>
+                    <div className="slogan-text">
+                      {slogan}
+                    </div>
+                  </div>
+
+                  {/* Panchang Section */}
+                  <div className="w-64 text-right">
+                    <div className="panchang-section">
+                      <div className="font-black text-red-800 text-3xl mb-1">{dateText}</div>
+                      <div className="font-bold text-gray-600 text-xl">{tithi}</div>
+                      <div className="text-gray-500 text-lg italic">{panchang}</div>
+                    </div>
                   </div>
                 </div>
 
-                {/* Panchang Section */}
-                <div className="w-72 flex-shrink-0">
-                  <div className="panchang-section">
-                    <div className="font-black text-red-800 text-3xl mb-1">{dateText}</div>
-                    <div className="font-bold text-gray-600 text-xl">{tithi}</div>
-                    <div className="text-gray-500 text-lg italic mb-3">{panchang}</div>
-                    <div className="bg-red-50 p-3 rounded-xl border border-red-100 shadow-sm">
-                      <div className="flex items-center gap-2 text-red-800 font-black text-xs uppercase mb-1">
-                        <Quote size={12} /> सुविचार
-                      </div>
-                      <div className="text-gray-700 text-base font-medium leading-relaxed">
-                        {suvichar}
-                      </div>
+                {/* Suvichar Box */}
+                <div className="w-full">
+                  <div className="bg-red-50 p-6 rounded-2xl border border-red-100 shadow-sm flex items-center gap-6">
+                    <div className="bg-red-800 text-white p-3 rounded-xl shadow-lg">
+                      <Quote size={24} />
+                    </div>
+                    <div className="text-gray-700 text-2xl font-bold leading-relaxed italic">
+                      "{suvichar}"
                     </div>
                   </div>
                 </div>
@@ -267,7 +295,14 @@ export default function App() {
 
               {/* Content Section */}
               <main className="flex-grow">
-                <div className="newspaper-columns drop-cap">
+                <div 
+                  className="newspaper-columns drop-cap"
+                  style={{ 
+                    fontSize: dynamicStyles.fontSize, 
+                    columnCount: dynamicStyles.columnCount,
+                    lineHeight: dynamicStyles.lineHeight
+                  }}
+                >
                   {articleImage && (
                     <div className="mb-8 float-left w-[60%] pr-10 pt-2">
                       <div className="p-3 bg-white border-2 border-gray-100 shadow-xl">
