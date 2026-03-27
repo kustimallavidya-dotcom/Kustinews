@@ -57,85 +57,102 @@ export default function App() {
   };
 
   const exportAsImage = async () => {
-    const element = document.getElementById('newspaper-canvas-export');
-    if (!element) return;
+    const element = canvasRef.current;
+    if (!element) {
+      alert('कॅनव्हास सापडला नाही. कृपया पेज रिफ्रेश करा.');
+      return;
+    }
     setIsExporting('png');
     
     try {
       // Ensure we are at the top for capture
       window.scrollTo(0, 0);
       // Give more time for images and fonts to settle
-      await new Promise(resolve => setTimeout(resolve, 800));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       const canvas = await html2canvas(element, {
-        scale: 2, // High resolution for 1080x1920
+        scale: 1.1, // Slightly reduced for better mobile compatibility
         useCORS: true,
-        allowTaint: true,
+        allowTaint: false,
         backgroundColor: '#fffdfa',
-        width: 1080,
-        height: 1920,
-        logging: false,
-        imageTimeout: 0, // No timeout for images
+        logging: true,
+        imageTimeout: 30000,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: 1080,
+        windowHeight: 1920,
         onclone: (clonedDoc) => {
           const el = clonedDoc.getElementById('newspaper-canvas-export');
           if (el) {
             el.style.transform = 'none';
-            el.style.position = 'relative';
-            el.style.display = 'flex';
+            el.style.position = 'fixed';
+            el.style.left = '0';
+            el.style.top = '0';
             el.style.margin = '0';
             el.style.boxShadow = 'none';
+            
+            // Ensure visibility
+            el.style.visibility = 'visible';
+            el.style.display = 'flex';
+            
+            // Optionally hide texture if it causes issues
+            const texture = el.querySelector('.paper-texture') as HTMLElement;
+            if (texture) texture.style.opacity = '0.03'; 
           }
         }
       });
       
-      canvas.toBlob((blob) => {
-        if (!blob) throw new Error('Blob creation failed');
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.download = `kusti-mallavidya-${Date.now()}.png`;
-        link.href = url;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        setTimeout(() => URL.revokeObjectURL(url), 100);
-      }, 'image/png', 1.0);
+      const imgData = canvas.toDataURL('image/png', 1.0);
+      const link = document.createElement('a');
+      link.href = imgData;
+      link.download = `kusti-mallavidya-${Date.now()}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
       
-    } catch (error) {
+    } catch (error: any) {
       console.error('Export failed:', error);
-      alert('इमेज डाउनलोड करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.');
+      alert(`इमेज डाउनलोड करताना त्रुटी आली: ${error?.message || 'तांत्रिक अडचण'}. कृपया पुन्हा प्रयत्न करा.`);
     } finally {
       setIsExporting(null);
     }
   };
 
   const exportAsPDF = async () => {
-    const element = document.getElementById('newspaper-canvas-export');
-    if (!element) return;
+    const element = canvasRef.current;
+    if (!element) {
+      alert('कॅनव्हास सापडला नाही.');
+      return;
+    }
     setIsExporting('pdf');
     
     try {
       window.scrollTo(0, 0);
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       const canvas = await html2canvas(element, {
-        scale: 1.5,
+        scale: 1.1,
         useCORS: true,
-        allowTaint: true,
+        allowTaint: false,
         backgroundColor: '#fffdfa',
-        width: 1080,
-        height: 1920,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: 1080,
+        windowHeight: 1920,
         onclone: (clonedDoc) => {
           const el = clonedDoc.getElementById('newspaper-canvas-export');
           if (el) {
             el.style.transform = 'none';
-            el.style.position = 'relative';
-            el.style.display = 'flex';
+            el.style.position = 'fixed';
+            el.style.left = '0';
+            el.style.top = '0';
             el.style.margin = '0';
+            el.style.boxShadow = 'none';
           }
         }
       });
       
-      const imgData = canvas.toDataURL('image/jpeg', 0.95);
+      const imgData = canvas.toDataURL('image/jpeg', 0.85);
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'px',
@@ -144,9 +161,9 @@ export default function App() {
       
       pdf.addImage(imgData, 'JPEG', 0, 0, 1080, 1920);
       pdf.save(`kusti-mallavidya-${Date.now()}.pdf`);
-    } catch (error) {
+    } catch (error: any) {
       console.error('PDF Export failed:', error);
-      alert('PDF डाउनलोड करताना त्रुटी आली.');
+      alert(`PDF डाउनलोड करताना त्रुटी आली: ${error?.message || 'तांत्रिक अडचण'}.`);
     } finally {
       setIsExporting(null);
     }
