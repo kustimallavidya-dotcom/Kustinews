@@ -140,6 +140,10 @@ export default function App() {
             // Fix for potential overlap in cloned version
             const header = el.querySelector('header');
             if (header) header.style.marginBottom = '30px';
+
+            // Remove texture overlay for export to avoid oklab/parsing issues
+            const texture = el.querySelector('.paper-texture');
+            if (texture) (texture as HTMLElement).style.display = 'none';
           }
         }
       });
@@ -198,6 +202,10 @@ export default function App() {
             el.style.margin = '0';
             el.style.boxShadow = 'none';
             el.style.border = '4px solid #000000';
+
+            // Remove texture overlay for export to avoid oklab/parsing issues
+            const texture = el.querySelector('.paper-texture');
+            if (texture) (texture as HTMLElement).style.display = 'none';
           }
         }
       });
@@ -376,10 +384,10 @@ export default function App() {
                       {/* Floating Article Image in the first column if it exists */}
                       {colIdx === 0 && articleImage && (
                         <div className="mb-6 w-full">
-                          <div className="p-3 bg-white border-2 border-gray-100 shadow-xl">
+                          <div className="p-3 bg-white border-2 border-[#f3f4f6]" style={{ boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}>
                             <img src={articleImage} alt="Article" className="w-full object-cover" referrerPolicy="no-referrer" />
                           </div>
-                          <div className="flex items-center gap-2 mt-3 text-gray-400 font-bold italic text-sm border-b border-gray-100 pb-2">
+                          <div className="flex items-center gap-2 mt-3 text-[#9ca3af] font-bold italic text-sm border-b border-[#f3f4f6] pb-2">
                             <ImageIcon size={14} /> छायाचित्र: कुस्ती मल्लविद्या
                           </div>
                         </div>
@@ -395,7 +403,7 @@ export default function App() {
                       
                       {/* Column divider line except for the last column */}
                       {colIdx < dynamicStyles.columnCount - 1 && (
-                        <div className="absolute top-0 -right-4 w-[1px] h-full bg-black/10" />
+                        <div className="absolute top-0 -right-4 w-[1px] h-full" style={{ backgroundColor: 'rgba(0,0,0,0.1)' }} />
                       )}
                     </div>
                   ))}
@@ -403,20 +411,20 @@ export default function App() {
 
                 {/* Author Credit Section */}
                 <div className="mt-auto pt-6 flex justify-end">
-                  <div className="author-card-premium flex items-center gap-4 min-w-[350px] max-w-[600px] shadow-sm">
-                    <div className={`${authorStyles.photoSize} rounded-full border-4 border-black overflow-hidden bg-white shadow-lg flex-shrink-0 transition-all duration-300`}>
+                  <div className="author-card-premium flex items-center gap-4 min-w-[350px] max-w-[600px]" style={{ boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)' }}>
+                    <div className={`${authorStyles.photoSize} rounded-full border-4 border-black overflow-hidden bg-white flex-shrink-0 transition-all duration-300`} style={{ boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)' }}>
                       {authorPhoto ? (
                         <img src={authorPhoto} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                       ) : (
-                        <UserCircle className="w-full h-full text-gray-200" />
+                        <UserCircle className="w-full h-full text-[#e5e7eb]" />
                       )}
                     </div>
                     <div className="overflow-hidden">
                       <div className="flex items-center gap-2 text-black font-black text-xs uppercase tracking-[0.2em] mb-1">
                         <PenTool size={14} /> विशेष लेख
                       </div>
-                      <div className={`${authorStyles.fontSize} font-black text-gray-900 leading-tight mb-1 truncate`}>{authorName}</div>
-                      <div className="text-lg text-gray-600 font-bold truncate">{authorDesignation}</div>
+                      <div className={`${authorStyles.fontSize} font-black text-[#111827] leading-tight mb-1 truncate`}>{authorName}</div>
+                      <div className="text-lg text-[#4b5563] font-bold truncate">{authorDesignation}</div>
                     </div>
                   </div>
                 </div>
@@ -426,11 +434,11 @@ export default function App() {
               <footer className="mt-auto pt-10 border-t-2 border-black flex justify-between items-end">
                 <div className="flex flex-col gap-2">
                   <div className="font-black text-[#8b0000] text-4xl tracking-tighter">कुस्ती मल्लविद्या</div>
-                  <div className="text-xl font-bold text-gray-500 italic">महाराष्ट्राची अस्मिता, कुस्तीची परंपरा</div>
+                  <div className="text-xl font-bold text-[#6b7280] italic">महाराष्ट्राची अस्मिता, कुस्तीची परंपरा</div>
                 </div>
                 <div className="text-right space-y-2">
                   <div className="inline-block px-4 py-1 bg-[#8b0000] text-white text-sm font-black uppercase tracking-widest rounded-full">डिजिटल आवृत्ती</div>
-                  <div className="text-lg font-bold text-gray-400">www.kustimallavidya.org</div>
+                  <div className="text-lg font-bold text-[#9ca3af]">www.kustimallavidya.org</div>
                 </div>
               </footer>
 
