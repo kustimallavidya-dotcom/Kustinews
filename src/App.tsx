@@ -28,15 +28,15 @@ export default function App() {
   // Dynamic content styling logic
   const getContentStyles = () => {
     const len = content.length;
-    // More granular scaling for very long text
-    if (len < 200) return { fontSize: '44px', columnCount: 1, lineHeight: '1.4' };
-    if (len < 500) return { fontSize: '34px', columnCount: 2, lineHeight: '1.4' };
-    if (len < 1000) return { fontSize: '28px', columnCount: 2, lineHeight: '1.5' };
-    if (len < 2000) return { fontSize: '22px', columnCount: 3, lineHeight: '1.5' };
-    if (len < 3500) return { fontSize: '18px', columnCount: 3, lineHeight: '1.5' };
-    if (len < 5000) return { fontSize: '15px', columnCount: 4, lineHeight: '1.4' };
-    if (len < 7000) return { fontSize: '13px', columnCount: 4, lineHeight: '1.3' };
-    return { fontSize: '11px', columnCount: 5, lineHeight: '1.2' };
+    // More granular scaling for very long text (1800+ words)
+    if (len < 500) return { fontSize: '38px', columnCount: 1, lineHeight: '1.4' };
+    if (len < 1200) return { fontSize: '30px', columnCount: 2, lineHeight: '1.4' };
+    if (len < 2500) return { fontSize: '24px', columnCount: 2, lineHeight: '1.5' };
+    if (len < 4500) return { fontSize: '19px', columnCount: 3, lineHeight: '1.5' };
+    if (len < 7000) return { fontSize: '15px', columnCount: 3, lineHeight: '1.4' };
+    if (len < 10000) return { fontSize: '12px', columnCount: 4, lineHeight: '1.3' };
+    if (len < 13000) return { fontSize: '10px', columnCount: 4, lineHeight: '1.2' };
+    return { fontSize: '9px', columnCount: 5, lineHeight: '1.1' };
   };
 
   const dynamicStyles = getContentStyles();
