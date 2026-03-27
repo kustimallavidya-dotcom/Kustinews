@@ -27,15 +27,15 @@ export default function App() {
   // Dynamic content styling logic
   const getContentStyles = () => {
     const len = content.length;
-    // More granular scaling for very long text (1800+ words)
-    if (len < 500) return { fontSize: '38px', columnCount: 1, lineHeight: '1.5' };
-    if (len < 1200) return { fontSize: '30px', columnCount: 2, lineHeight: '1.5' };
-    if (len < 2500) return { fontSize: '24px', columnCount: 2, lineHeight: '1.6' };
-    if (len < 4500) return { fontSize: '19px', columnCount: 3, lineHeight: '1.6' };
-    if (len < 7000) return { fontSize: '15px', columnCount: 3, lineHeight: '1.5' };
-    if (len < 10000) return { fontSize: '12px', columnCount: 4, lineHeight: '1.4' };
-    if (len < 13000) return { fontSize: '10px', columnCount: 4, lineHeight: '1.3' };
-    return { fontSize: '9px', columnCount: 5, lineHeight: '1.2' };
+    // More granular scaling for very long text
+    if (len < 500) return { fontSize: '38px', columnCount: 1, lineHeight: '1.6' };
+    if (len < 1200) return { fontSize: '30px', columnCount: 2, lineHeight: '1.6' };
+    if (len < 2500) return { fontSize: '24px', columnCount: 2, lineHeight: '1.7' };
+    if (len < 4500) return { fontSize: '19px', columnCount: 3, lineHeight: '1.7' };
+    if (len < 7000) return { fontSize: '16px', columnCount: 3, lineHeight: '1.6' };
+    if (len < 10000) return { fontSize: '13px', columnCount: 4, lineHeight: '1.5' };
+    if (len < 13000) return { fontSize: '11px', columnCount: 4, lineHeight: '1.4' };
+    return { fontSize: '10px', columnCount: 5, lineHeight: '1.3' };
   };
 
   const getTitleFontSize = (text: string) => {
@@ -73,9 +73,8 @@ export default function App() {
     let currentChars = 0;
     
     paragraphs.forEach(p => {
-      // If a single paragraph is longer than the target per column, we might need to split it
-      // but for simplicity, we'll just move to the next column if the current one is already "full"
-      if (currentCol < numCols - 1 && currentChars > targetPerCol * (currentCol + 0.95)) {
+      // Improved splitting logic to prevent large gaps
+      if (currentCol < numCols - 1 && currentChars > targetPerCol * (currentCol + 0.9)) {
         currentCol++;
       }
       columns[currentCol].push(p);
@@ -329,14 +328,14 @@ export default function App() {
               className="newspaper-canvas-9-16"
             >
               {/* Header Section */}
-              <header className="mb-6 pb-4 border-b-2 border-black">
+              <header className="mb-8 pb-6 border-b-4 border-black">
                 <div className="grid grid-cols-[180px_1fr_220px] items-center gap-4">
                   {/* Logo Area */}
                   <div className="flex items-center justify-start">
                     {logo ? (
                       <img src={logo} alt="Logo" className="max-w-[150px] max-h-[150px] object-contain" referrerPolicy="no-referrer" />
                     ) : (
-                      <div className="w-32 h-32 text-black font-black text-center text-lg border-4 border-black flex items-center justify-center p-2">लोगो</div>
+                      <div className="w-32 h-32 text-[#8b0000] font-black text-center text-lg border-4 border-[#8b0000] flex items-center justify-center p-2">लोगो</div>
                     )}
                   </div>
 
@@ -348,7 +347,7 @@ export default function App() {
                     >
                       {title}
                     </h1>
-                    <div className="slogan-text text-xl mt-1">
+                    <div className="slogan-text">
                       {slogan}
                     </div>
                   </div>
@@ -356,8 +355,8 @@ export default function App() {
                   {/* Date Section */}
                   <div className="text-right">
                     <div className="panchang-section inline-block py-2">
-                      <div className="font-black text-black text-2xl">{dateText}</div>
-                      <div className="font-bold text-gray-500 text-lg">{tithi}</div>
+                      <div className="font-black text-[#b45309] text-3xl mb-1">{dateText}</div>
+                      <div className="font-bold text-[#1e3a8a] text-xl">{tithi}</div>
                     </div>
                   </div>
                 </div>
@@ -426,11 +425,11 @@ export default function App() {
               {/* Footer Section */}
               <footer className="mt-auto pt-10 border-t-2 border-black flex justify-between items-end">
                 <div className="flex flex-col gap-2">
-                  <div className="font-black text-black text-4xl tracking-tighter">कुस्ती मल्लविद्या</div>
-                  <div className="text-xl font-bold text-gray-400 italic">महाराष्ट्राची अस्मिता, कुस्तीची परंपरा</div>
+                  <div className="font-black text-[#8b0000] text-4xl tracking-tighter">कुस्ती मल्लविद्या</div>
+                  <div className="text-xl font-bold text-gray-500 italic">महाराष्ट्राची अस्मिता, कुस्तीची परंपरा</div>
                 </div>
                 <div className="text-right space-y-2">
-                  <div className="inline-block px-4 py-1 bg-black text-white text-sm font-black uppercase tracking-widest rounded-full">डिजिटल आवृत्ती</div>
+                  <div className="inline-block px-4 py-1 bg-[#8b0000] text-white text-sm font-black uppercase tracking-widest rounded-full">डिजिटल आवृत्ती</div>
                   <div className="text-lg font-bold text-gray-400">www.kustimallavidya.org</div>
                 </div>
               </footer>

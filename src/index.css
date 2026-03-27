@@ -7,8 +7,13 @@
   /* Force hex colors to prevent html2canvas oklch error */
   --color-red-50: #fef2f2;
   --color-red-100: #fee2e2;
+  --color-red-600: #dc2626;
+  --color-red-700: #b91c1c;
   --color-red-800: #8b0000;
   --color-red-900: #7f0000;
+  --color-blue-800: #1e40af;
+  --color-blue-900: #1e3a8a;
+  --color-amber-700: #b45309;
   --color-gray-50: #f9fafb;
   --color-gray-100: #f3f4f6;
   --color-gray-200: #e5e7eb;
@@ -19,6 +24,8 @@
   --color-gray-700: #374151;
   --color-gray-800: #1f2937;
   --color-gray-900: #111827;
+  --color-black: #000000;
+  --color-white: #ffffff;
 }
 
 body {
@@ -72,14 +79,14 @@ body {
   font-family: var(--font-tiro);
   font-size: 80px;
   font-weight: 900;
-  color: #000000;
-  letter-spacing: -0.01em;
+  color: #8b0000; /* Magazine Red */
+  letter-spacing: -0.02em;
   text-transform: uppercase;
   text-shadow: 
     2px 2px 0px #ffffff,
-    4px 4px 0px rgba(0, 0, 0, 0.1);
+    4px 4px 0px rgba(139, 0, 0, 0.15);
   line-height: 1.1;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
   text-align: center;
   word-break: keep-all;
   white-space: nowrap;
@@ -89,34 +96,34 @@ body {
 
 .slogan-text {
   font-family: var(--font-tiro);
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 700;
-  color: #4b5563;
+  color: #1e3a8a; /* Magazine Blue */
   font-style: italic;
   letter-spacing: 0.05em;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 15px;
-  margin-top: 5px;
+  margin-top: 8px;
 }
 
 .slogan-text::before,
 .slogan-text::after {
   content: "";
   height: 3px;
-  width: 100px;
-  background: linear-gradient(to right, transparent, #000000, transparent);
-  opacity: 0.4;
+  width: 120px;
+  background: linear-gradient(to right, transparent, #1e3a8a, transparent);
+  opacity: 0.3;
 }
 
 .panchang-section {
   font-size: 20px;
-  line-height: 1.5;
+  line-height: 1.4;
   color: #374151;
-  border-left: 4px solid #000000;
+  border-left: 6px solid #b45309; /* Magazine Amber/Gold */
   padding-left: 20px;
-  background: linear-gradient(to right, #f3f4f6, transparent);
+  background: linear-gradient(to right, #fffbeb, transparent);
   border-radius: 0 10px 10px 0;
 }
 
