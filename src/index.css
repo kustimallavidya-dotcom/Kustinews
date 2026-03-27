@@ -42,14 +42,15 @@ body {
 }
 
 .newspaper-columns {
-  column-gap: 4rem;
+  column-gap: 3rem;
   column-rule: 1px solid #8b000033;
   text-align: justify;
   hyphens: auto;
   color: #1a1a1a;
-  height: 1150px; /* Adjusted to fit within 1920px canvas */
+  height: 1100px;
   margin-bottom: 20px;
-  overflow: hidden; /* Prevent messy overflow */
+  overflow: hidden;
+  column-fill: auto;
 }
 
 .drop-cap::first-letter {
@@ -67,23 +68,19 @@ body {
 
 .creative-title-main {
   font-family: var(--font-tiro);
-  font-size: 130px;
+  font-size: 110px;
   font-weight: 900;
   color: #8b0000;
   letter-spacing: -0.01em;
   text-transform: uppercase;
   text-shadow: 
-    2px 2px 0px #fff,
-    4px 4px 0px rgba(139, 0, 0, 0.1),
-    -1px -1px 0px #fff,
-    1px -1px 0px #fff,
-    -1px 1px 0px #fff,
-    1px 1px 0px #fff;
-  line-height: 0.85;
+    2px 2px 0px #ffffff,
+    4px 4px 0px rgba(139, 0, 0, 0.1);
+  line-height: 1;
   margin-bottom: 5px;
   text-align: center;
   word-break: keep-all;
-  white-space: nowrap;
+  white-space: normal;
   width: 100%;
   filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
 }

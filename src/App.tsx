@@ -77,6 +77,8 @@ export default function App() {
         backgroundColor: '#fffdfa',
         logging: true,
         imageTimeout: 30000,
+        width: 1080,
+        height: 1920,
         scrollX: 0,
         scrollY: 0,
         windowWidth: 1080,
@@ -135,6 +137,8 @@ export default function App() {
         useCORS: true,
         allowTaint: false,
         backgroundColor: '#fffdfa',
+        width: 1080,
+        height: 1920,
         scrollX: 0,
         scrollY: 0,
         windowWidth: 1080,
@@ -279,19 +283,19 @@ export default function App() {
               className="newspaper-canvas-9-16"
             >
               {/* Header Section */}
-              <header className="mb-12 pb-10 border-b-[12px] border-double border-red-800">
-                <div className="flex items-center justify-between mb-10">
+              <header className="mb-10 pb-8 border-b-[12px] border-double border-red-800">
+                <div className="grid grid-cols-[200px_1fr_250px] items-center gap-4 mb-8">
                   {/* Logo Area */}
-                  <div className="w-48 h-48 flex items-center justify-center">
+                  <div className="flex items-center justify-center">
                     {logo ? (
-                      <img src={logo} alt="Logo" className="max-w-full max-h-full object-contain" referrerPolicy="no-referrer" />
+                      <img src={logo} alt="Logo" className="max-w-[180px] max-h-[180px] object-contain" referrerPolicy="no-referrer" />
                     ) : (
-                      <div className="text-red-800 font-black text-center text-xl border-4 border-red-800 p-4">लोगो</div>
+                      <div className="w-40 h-40 text-red-800 font-black text-center text-xl border-4 border-red-800 flex items-center justify-center p-4">लोगो</div>
                     )}
                   </div>
 
                   {/* Masthead Center */}
-                  <div className="flex-grow text-center px-10">
+                  <div className="text-center overflow-hidden">
                     <h1 className="creative-title-main">
                       {title}
                     </h1>
@@ -301,8 +305,8 @@ export default function App() {
                   </div>
 
                   {/* Panchang Section */}
-                  <div className="w-64 text-right">
-                    <div className="panchang-section">
+                  <div className="text-right">
+                    <div className="panchang-section inline-block">
                       <div className="font-black text-red-800 text-3xl mb-1">{dateText}</div>
                       <div className="font-bold text-gray-600 text-xl">{tithi}</div>
                       <div className="text-gray-500 text-lg italic">{panchang}</div>
